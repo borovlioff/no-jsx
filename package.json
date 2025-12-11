@@ -1,0 +1,41 @@
+{
+  "name": "no-jsx",
+  "version": "1.0.0",
+  "main": "./dist/render.cjs",
+  "description": "A minimal reactive UI library",
+  "type": "module",
+  "types": "./dist/render.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/render.js",
+      "require": "./dist/render.cjs"
+    }
+  },
+  "module": "./dist/render.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "vite build && tsc --emitDeclarationOnly --declaration --outDir dist"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21"
+  },
+  "keywords": [
+    "reactive",
+    "dom",
+    "jsx",
+    "no-jsx",
+    "ui",
+    "library"
+  ],
+  "author": "borovlioff",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/borovlioff/no-jsx.git"
+  }
+}
