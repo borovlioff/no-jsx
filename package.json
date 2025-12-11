@@ -1,5 +1,5 @@
 {
-  "name": "no-jsx",
+  "name": "@borovlioff/no-jsx",
   "version": "1.0.0",
   "main": "./dist/render.cjs",
   "description": "A minimal reactive UI library",
