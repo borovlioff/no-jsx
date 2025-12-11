@@ -22,36 +22,128 @@ npm install no-jsx
 
 ---
 
-## 🚀 Quick Example
+## 🚀 Quick Example 1
 
-```ts
-import { div, button, fragment, createStore } from 'no-jsx';
+```html
+<!DOCTYPE html>
+<html lang="en">
 
-const count = createStore(0);
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 
-const Counter = () => 
-  div(
-    { style: 'margin: 10px; padding: 8px; border: 1px solid #ccc;' },
-    `Count: ${count.get()}`,
-    button(
-      { 
-        onclick: () => count.set(count.get() + 1),
-        disabled: count.get() > 5 
-      },
-      'Increment'
+</head>
+
+<body>
+</body>
+<script type="module">
+  import { div, span, createStore, button, h1, ul ,li, input} from 'https://unpkg.com/@borovlioff/no-jsx@1.0.0/dist/render.js';
+
+
+
+export const todosStore = createStore([
+  { id: 1, text: 'Learn reactive rendering', completed: false },
+  { id: 2, text: 'Build store', completed: true },
+]);
+
+export const addTodo = (text) => {
+  const current = todosStore.get();
+  const newTodo = { id: Date.now(), text, completed: false };
+  todosStore.set([...current, newTodo]);
+};
+
+export const toggleTodo = (id) => {
+  const current = todosStore.get();
+  todosStore.set(
+    current.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
     )
   );
+};
 
-const App = () =>
-  fragment(
-    div({}, 'Reactive App'),
-    () => Counter() // ← reactive child (re-runs when `count` changes)
+export const removeTodo = (id) => {
+  todosStore.set(todosStore.get().filter(t => t.id !== id));
+};
+
+export const TodoItem = ({ todo }) => {
+  return li(
+    { className: 'todo-item' },
+    input({
+      type: 'checkbox',
+      checked: todo.completed,
+      onchange: () => toggleTodo(todo.id),
+    }),
+    span(
+      {
+        style: `text-decoration: ${todo.completed ? 'line-through' : 'none'}; color: ${todo.completed ? '#ff0000ff' : 'inherit'}`,
+      },
+      todo.text
+    ),
+    button(
+      {
+        onclick: () => removeTodo(todo.id),
+      },
+      'Delete'
+    )
   );
+};
 
-document.body.appendChild(App());
+
+export const TodoList = () => {
+  const todos = todosStore.get();
+  return ul(
+    { className: 'todo-list' },
+    ...todos.map(todo => TodoItem({ todo }))
+  );
+};
+
+const TodoApp = () => {
+  const inputEl = input({
+    type: 'text',
+    placeholder: 'New todo...',
+  });
+
+  function handleAddTodo() {
+    const text = (inputEl).value.trim();
+    if (text) {
+      addTodo(text);
+      (inputEl).value = '';
+    }
+  }
+
+  return div(
+    { className: 'app' },
+    h1({}, 'Todo App'),
+    inputEl,
+    button({onclick: handleAddTodo, className: 'add-todo' }, 'Add Todo'),
+    () => TodoList()
+  );
+};
+
+document.body.appendChild(TodoApp());
+</script>
+
+</html>
+```
+## 🚀 Quick Example 1 
+Using typescript
+
+```ts
+ import { createStore} from "@borovlioff/no-jsx"
+
+ export type Todo = {
+  id: number;
+  text: string;
+  completed: boolean;
+};
+
+export const todosStore = createStore<Todo[]>([
+  { id: 1, text: 'Learn reactive rendering', completed: false },
+  { id: 2, text: 'Build store', completed: true },
+]);
 ```
 
-> 🔁 The `Counter` re-renders automatically when `count` updates — no manual event wiring.
 
 ---
 
